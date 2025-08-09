@@ -14,3 +14,12 @@ export async function createNote(note) {
     }
 }
 
+export async function getNotes() {
+    try {
+        const res = await axios.get(`${API_URL}/notes`)
+        return res.data.notes
+    } catch (err) {
+        console.error('Error fetching notes', err)
+        return {success: false, message: 'Failed to fetch notes'}
+    }
+}

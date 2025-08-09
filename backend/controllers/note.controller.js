@@ -4,7 +4,7 @@ const validation = require('../validation/schema')
 
 const createNote = asyncHandler(async (req, res) => {
     const value = await validation.noteSchema.validateAsync(req.body)
-    const {title, content} = value
+    const { title, content } = value
 
     const [result] = await pool.query(`
         INSERT INTO notes (title, content) VALUES (?, ?)
@@ -21,6 +21,18 @@ const createNote = asyncHandler(async (req, res) => {
     })
 })
 
+const getNotes = asyncHandler(async (req, res) => {
+    const [rows] = await pool.query(`
+        SELECT * FROM notes
+        `)
+    res.json({
+        success: true,
+        message: 'Note successfully fetched',
+        notes: rows
+    })
+})
+
 module.exports = {
-    createNote
+    createNote,
+    getNotes
 }

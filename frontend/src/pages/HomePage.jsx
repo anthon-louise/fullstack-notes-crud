@@ -1,16 +1,29 @@
-import {useState} from 'react'
-import {createNote} from '../services/noteService'
+import { useState, useEffect } from 'react'
+import { createNote } from '../services/noteService'
 import NoteInput from '../components/NoteInput'
 import NoteButton from '../components/NoteButton'
+import NoteList from '../components/NoteList'
+import { getNotes } from "../services/noteService"
+
 
 function HomePage() {
     const [title, setTitle] = useState('')
     const [content, setContent] = useState('')
+    const [notes, setNotes] = useState([])
+
+    async function fetchData() {
+        const data = await getNotes()
+        console.log(data)
+        if (Array.isArray(data)) {
+            setNotes(data)
+        }
+    }
 
     async function handleSave() {
-        const data = await createNote({title, content})
+        const data = await createNote({ title, content })
 
         if (data.success) {
+            fetchData()
             alert(data.message)
             setTitle('')
             setContent('')
@@ -20,15 +33,25 @@ function HomePage() {
         }
     }
 
+
+    useEffect(() => {
+        fetchData()
+    }, [])
+
+
     return (
         <div>
-            <NoteInput value={title} onChange={setTitle} placeholder="title"/>
-            <NoteInput value={content} onChange={setContent} placeholder="content"/>
-            <NoteButton label="Add" onClick={handleSave}/>
+            <NoteInput value={title} onChange={setTitle} placeholder="title" />
+            <NoteInput value={content} onChange={setContent} placeholder="content" />
+            <NoteButton label="Add" onClick={handleSave} />
 
-            <div>
-
-            </div>
+            {
+                notes.length > 0 ? (
+                    <NoteList notes={notes} />
+                ) : (
+                    <p>No notes found</p>
+                )
+            }
         </div>
     )
 }
