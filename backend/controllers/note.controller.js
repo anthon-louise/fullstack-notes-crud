@@ -32,7 +32,30 @@ const getNotes = asyncHandler(async (req, res) => {
     })
 })
 
+const deleteNote = asyncHandler(async (req, res) => {
+    const value = await validation.idSchema.validateAsync(req.params)
+    const noteId = value.id
+
+    const [rows] = await pool.query(`
+        SELECT * FROM notes WHERE id=?
+        `, [noteId])
+    if (rows.lenght === 0) {
+        const err = new Error('No notes found')
+        err.status = 404
+        throw err
+    }
+
+    await pool.query(`
+        DELETE FROM notes WHERE id=?
+        `, [noteId])
+    res.json({
+        success: true,
+        message: 'Note successfully deleted'
+    })
+})
+
 module.exports = {
     createNote,
-    getNotes
+    getNotes,
+    deleteNote
 }

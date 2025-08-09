@@ -5,6 +5,11 @@ const noteSchema = Joi.object({
     content: Joi.string().min(3).max(20).required()
 })
 
+const idSchema = Joi.object({
+    id: Joi.number().integer().positive().required()
+})
+
 module.exports = {
-    noteSchema
+    noteSchema,
+    idSchema
 }
