@@ -25,6 +25,10 @@ function HomePage() {
             <NoteInput value={title} onChange={setTitle} placeholder="title"/>
             <NoteInput value={content} onChange={setContent} placeholder="content"/>
             <NoteButton label="Add" onClick={handleSave}/>
+
+            <div>
+
+            </div>
         </div>
     )
 }
