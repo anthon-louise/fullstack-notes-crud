@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { createNote } from '../services/noteService'
+import { createNote, deleteNote } from '../services/noteService'
 import NoteInput from '../components/NoteInput'
 import NoteButton from '../components/NoteButton'
 import NoteList from '../components/NoteList'
@@ -16,6 +16,16 @@ function HomePage() {
         console.log(data)
         if (Array.isArray(data)) {
             setNotes(data)
+        }
+    }
+
+    async function handleDelete(id) {
+        const data = await deleteNote(id)
+        if (data.success) {
+            alert(data.message)
+            fetchData()
+        } else {
+            alert(data.message || 'Error deleting note')
         }
     }
 
@@ -47,7 +57,7 @@ function HomePage() {
 
             {
                 notes.length > 0 ? (
-                    <NoteList notes={notes} />
+                    <NoteList notes={notes} handleDelete={handleDelete} />
                 ) : (
                     <p>No notes found</p>
                 )
