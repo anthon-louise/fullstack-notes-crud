@@ -1,5 +1,7 @@
 import {useState} from 'react'
 import {createNote} from '../services/noteService'
+import NoteInput from '../components/NoteInput'
+import NoteButton from '../components/NoteButton'
 
 function HomePage() {
     const [title, setTitle] = useState('')
@@ -13,25 +15,16 @@ function HomePage() {
             setTitle('')
             setContent('')
         } else {
-            alert('Error creating note')
+            const message = data.message || 'Error creating note'
+            alert(message)
         }
     }
 
     return (
         <div>
-            <input
-                type="text"
-                placeholder='title'
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <input
-                type="text"
-                placeholder='content'
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-            />
-            <button onClick={handleSave}>Add</button>
+            <NoteInput value={title} onChange={setTitle} placeholder="title"/>
+            <NoteInput value={content} onChange={setContent} placeholder="content"/>
+            <NoteButton label="Add" onClick={handleSave}/>
         </div>
     )
 }
